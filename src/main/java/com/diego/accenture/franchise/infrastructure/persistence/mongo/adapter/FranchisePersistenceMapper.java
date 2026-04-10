@@ -7,6 +7,7 @@ import com.diego.accenture.franchise.infrastructure.persistence.mongo.document.B
 import com.diego.accenture.franchise.infrastructure.persistence.mongo.document.FranchiseDocument;
 import com.diego.accenture.franchise.infrastructure.persistence.mongo.document.ProductDocument;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FranchisePersistenceMapper {
@@ -14,8 +15,11 @@ public class FranchisePersistenceMapper {
         return FranchiseDocument.builder()
                 .id(franchise.getId())
                 .name(franchise.getName())
-                .branches(franchise.getBranches() == null ? List.of() :
-                        franchise.getBranches().stream().map(FranchisePersistenceMapper::toDocument).toList())
+                .branches(franchise.getBranches() == null
+                        ? new ArrayList<>()
+                        : new ArrayList<>(franchise.getBranches().stream()
+                                          .map(FranchisePersistenceMapper::toDocument)
+                                          .toList()))
                 .build();
     }
 
@@ -23,8 +27,11 @@ public class FranchisePersistenceMapper {
         return BranchDocument.builder()
                 .id(branch.getId())
                 .name(branch.getName())
-                .products(branch.getProducts() == null ? List.of():
-                        branch.getProducts().stream().map(FranchisePersistenceMapper::toDocument).toList())
+                .products(branch.getProducts() == null
+                ? new ArrayList<>()
+                : new ArrayList<>(branch.getProducts().stream()
+                                  .map(FranchisePersistenceMapper::toDocument)
+                                  .toList()))
                 .build();
     }
 
@@ -40,8 +47,11 @@ public class FranchisePersistenceMapper {
         return Franchise.builder()
                 .id(document.getId())
                 .name(document.getName())
-                .branches(document.getBranches() == null ? List.of():
-                        document.getBranches().stream().map(FranchisePersistenceMapper::toDomain).toList())
+                .branches(document.getBranches() == null
+                        ? new ArrayList<>()
+                        : new ArrayList<>(document.getBranches().stream()
+                                          .map(FranchisePersistenceMapper::toDomain)
+                                          .toList()))
                 .build();
     }
 
@@ -49,8 +59,11 @@ public class FranchisePersistenceMapper {
         return Branch.builder()
                 .id(document.getId())
                 .name(document.getName())
-                .products(document.getProducts() == null ? List.of():
-                        document.getProducts().stream().map(FranchisePersistenceMapper::toDomain).toList())
+                .products(document.getProducts() == null
+                        ? new ArrayList<>()
+                        : new ArrayList<>(document.getProducts().stream()
+                                          .map(FranchisePersistenceMapper::toDomain)
+                                          .toList()))
                 .build();
     }
 
