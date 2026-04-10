@@ -10,9 +10,15 @@ import com.diego.accenture.franchise.application.dto.UpdateStockRequest;
 import com.diego.accenture.franchise.application.usecase.UpdateProductStockUseCase;
 import com.diego.accenture.franchise.application.dto.TopStockProductResponse;
 import com.diego.accenture.franchise.application.usecase.GetTopStockProductsByFranchiseUseCase;
+import com.diego.accenture.franchise.application.dto.UpdateNameRequest;
+import com.diego.accenture.franchise.application.usecase.UpdateBranchNameUseCase;
+import com.diego.accenture.franchise.application.usecase.UpdateFranchiseNameUseCase;
+import com.diego.accenture.franchise.application.usecase.UpdateProductNameUseCase;
 
+import com.diego.accenture.franchise.domain.model.Franchise;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -29,6 +35,9 @@ public class FranchiseController {
     private final DeleteProductFromBranchUseCase deleteProductFromBranchUseCase;
     private final UpdateProductStockUseCase updateProductStockUseCase;
     private final GetTopStockProductsByFranchiseUseCase getTopStockProductsByFranchiseUseCase;
+    private final UpdateFranchiseNameUseCase updateFranchiseNameUseCase;
+    private final UpdateBranchNameUseCase updateBranchNameUseCase;
+    private final UpdateProductNameUseCase updateProductNameUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -89,5 +98,35 @@ public class FranchiseController {
             @PathVariable("franchiseId") String franchiseId
     ){
         return getTopStockProductsByFranchiseUseCase.execute(franchiseId);
+    }
+
+    @PatchMapping("/{franchiseId}/name")
+    public Mono<FranchiseResponse> updateFranchiseName(
+            @PathVariable("franchiseId") String franchiseId,
+            @Valid @RequestBody UpdateNameRequest request
+    ){
+        return updateFranchiseNameUseCase.execute(franchiseId, request.name())
+                .map(FranchiseDtoMapper::toResponse);
+    }
+
+    @PatchMapping("/{franchiseId}/branches/{branchId}/name")
+    public Mono<FranchiseResponse> updateBranchName(
+            @PathVariable("franchiseId") String franchiseId,
+            @PathVariable("branchId") String branchId,
+            @Valid @RequestBody UpdateNameRequest request
+    ){
+        return updateBranchNameUseCase.execute(franchiseId, branchId, request.name())
+                .map(FranchiseDtoMapper::toResponse);
+    }
+
+    @PatchMapping("/{franchiseId}/branches/{branchId}/products/{productId}/name")
+    public Mono<FranchiseResponse> updateProductName(
+            @PathVariable("franchiseId") String franchiseId,
+            @PathVariable("branchId") String branchId,
+            @PathVariable("productId") String productId,
+            @Valid @RequestBody UpdateNameRequest request
+            ){
+        return updateProductNameUseCase.execute(franchiseId, branchId, productId, request.name())
+                .map(FranchiseDtoMapper::toResponse);
     }
 }

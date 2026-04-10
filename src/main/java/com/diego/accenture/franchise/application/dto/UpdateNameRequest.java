@@ -1,4 +1,9 @@
 package com.diego.accenture.franchise.application.dto;
 
-public class UpdateNameRequest {
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdateNameRequest(
+        @NotBlank(message = "Name is required")
+        String name
+) {
 }
