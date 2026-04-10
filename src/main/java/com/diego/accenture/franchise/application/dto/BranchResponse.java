@@ -1,4 +1,10 @@
 package com.diego.accenture.franchise.application.dto;
 
-public class BranchResponse {
+import java.util.List;
+
+public record BranchResponse (
+        String id,
+        String name,
+        List<ProductResponse> products
+) {
 }

@@ -1,4 +1,9 @@
 package com.diego.accenture.franchise.application.dto;
 
-public class CreateFranchiseRequest {
+import jakarta.validation.constraints.NotBlank;
+
+public record CreateFranchiseRequest (
+    @NotBlank(message = "Franchise name is required")
+    String name
+) {
 }
