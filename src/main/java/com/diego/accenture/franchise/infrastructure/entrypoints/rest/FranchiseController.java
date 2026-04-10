@@ -5,6 +5,9 @@ import com.diego.accenture.franchise.application.mapper.FranchiseDtoMapper;
 import com.diego.accenture.franchise.application.usecase.CreateFranchiseUseCase;
 import com.diego.accenture.franchise.application.usecase.AddBranchToFranchiseUseCase;
 import com.diego.accenture.franchise.application.usecase.AddProductToBranchUseCase;
+import com.diego.accenture.franchise.application.usecase.DeleteProductFromBranchUseCase;
+import com.diego.accenture.franchise.application.dto.UpdateStockRequest;
+import com.diego.accenture.franchise.application.usecase.UpdateProductStockUseCase;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,8 @@ public class FranchiseController {
     private final CreateFranchiseUseCase createFranchiseUseCase;
     private final AddBranchToFranchiseUseCase addBranchToFranchiseUseCase;
     private final AddProductToBranchUseCase addProductToBranchUseCase;
+    private final DeleteProductFromBranchUseCase deleteProductFromBranchUseCase;
+    private final UpdateProductStockUseCase updateProductStockUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -51,6 +56,27 @@ public class FranchiseController {
                 request.name(),
                 request.stock()
         )
+                .map(FranchiseDtoMapper::toResponse);
+    }
+
+    @DeleteMapping("{franchiseId}/branches/{branchId}/products/{productId}")
+    public Mono<FranchiseResponse> deleteProduct(
+            @PathVariable String franchiseId,
+            @PathVariable String branchId,
+            @PathVariable String productId
+    ) {
+        return deleteProductFromBranchUseCase.execute(franchiseId, branchId, productId)
+                .map(FranchiseDtoMapper::toResponse);
+    }
+
+    @PatchMapping("/{franchiseId}/branches/{branchId}/products/{productId}/stock")
+    public Mono<FranchiseResponse> updateProductStock(
+            @PathVariable("franchiseId") String franchiseId,
+            @PathVariable("branchId") String branchId,
+            @PathVariable("productId") String productId,
+            @Valid @RequestBody UpdateStockRequest request
+    ) {
+        return updateProductStockUseCase.execute(franchiseId, branchId, productId, request.stock())
                 .map(FranchiseDtoMapper::toResponse);
     }
 }
