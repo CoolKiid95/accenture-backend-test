@@ -1,4 +1,8 @@
 package com.diego.accenture.franchise.application.dto;
 
-public class ProductResponse {
+public record ProductResponse (
+        String id,
+        String name,
+        Integer stock
+) {
 }
