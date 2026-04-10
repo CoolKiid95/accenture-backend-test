@@ -8,12 +8,15 @@ import com.diego.accenture.franchise.application.usecase.AddProductToBranchUseCa
 import com.diego.accenture.franchise.application.usecase.DeleteProductFromBranchUseCase;
 import com.diego.accenture.franchise.application.dto.UpdateStockRequest;
 import com.diego.accenture.franchise.application.usecase.UpdateProductStockUseCase;
+import com.diego.accenture.franchise.application.dto.TopStockProductResponse;
+import com.diego.accenture.franchise.application.usecase.GetTopStockProductsByFranchiseUseCase;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/franchises")
@@ -25,6 +28,7 @@ public class FranchiseController {
     private final AddProductToBranchUseCase addProductToBranchUseCase;
     private final DeleteProductFromBranchUseCase deleteProductFromBranchUseCase;
     private final UpdateProductStockUseCase updateProductStockUseCase;
+    private final GetTopStockProductsByFranchiseUseCase getTopStockProductsByFranchiseUseCase;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -78,5 +82,12 @@ public class FranchiseController {
     ) {
         return updateProductStockUseCase.execute(franchiseId, branchId, productId, request.stock())
                 .map(FranchiseDtoMapper::toResponse);
+    }
+
+    @GetMapping("/{franchiseId}/top-stock-products")
+    public Mono<List<TopStockProductResponse>> getTopStockProductByFranchise(
+            @PathVariable("franchiseId") String franchiseId
+    ){
+        return getTopStockProductsByFranchiseUseCase.execute(franchiseId);
     }
 }
