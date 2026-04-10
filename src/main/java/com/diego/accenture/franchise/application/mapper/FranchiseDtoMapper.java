@@ -23,7 +23,7 @@ public class FranchiseDtoMapper {
     public static BranchResponse toResponse(Branch branch){
         return new BranchResponse(
                 branch.getId(),
-                branch.getId(),
+                branch.getName(),
                 branch.getProducts() == null ? List.of():
                         branch.getProducts().stream().map(FranchiseDtoMapper::toResponse).toList()
         );

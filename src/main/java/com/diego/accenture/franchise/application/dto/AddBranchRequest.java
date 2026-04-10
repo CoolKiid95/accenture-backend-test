@@ -1,4 +1,9 @@
 package com.diego.accenture.franchise.application.dto;
 
-public class AddBranchRequest {
+import jakarta.validation.constraints.NotBlank;
+
+public record AddBranchRequest(
+        @NotBlank(message = "Branch name is required")
+        String name
+) {
 }
