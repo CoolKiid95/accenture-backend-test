@@ -191,3 +191,13 @@ Development was organized through small, incremental commits in a dedicated feat
 
 ## Docker Configuration
 A dedicated `docker` Spring profile was configured so the application can connect to MongoDB using the Docker service name instead of localhost.
+
+## Live Deployment
+The application is deployed on AWS EC2.
+Base URL:
+    http://3.137.147.106:8080
+Example:
+    http://3.137.147.106:8080/api/franchises
+
+## Deployment Notes
+The deployment uses Docker Compose on an EC2 instance to replicate local development conditions, ensuring environment consistency and simplifying setup.
